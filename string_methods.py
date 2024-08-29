@@ -75,8 +75,6 @@ def invalid_tweets(tweets: pd.DataFrame) -> pd.DataFrame:
 # +-------------+-------+
 
 
-import pandas as pd
-
 def calculate_special_bonus(employees: pd.DataFrame) -> pd.DataFrame:
     # create column for bonus and populate with zeros
     employees['bonus'] = 0
@@ -86,7 +84,56 @@ def calculate_special_bonus(employees: pd.DataFrame) -> pd.DataFrame:
     return employees.sort_values(by='employee_id', ascending=True)[['employee_id','bonus']]
 
 
+# Q 7
+
+# Fix names in a table 
+
+# Write a solution to fix the names so that only the first character is uppercase and the rest are lowercase.
+
+# Return the result table ordered by user_id.
+
+# The result format is in the following example.
+
+ 
+
+# Example 1:
+
+# Input: 
+# Users table:
+# +---------+-------+
+# | user_id | name  |
+# +---------+-------+
+# | 1       | aLice |
+# | 2       | bOB   |
+# +---------+-------+
+# Output: 
+# +---------+-------+
+# | user_id | name  |
+# +---------+-------+
+# | 1       | Alice |
+# | 2       | Bob   |
+# +---------+-------+
+
+def fix_names(users: pd.DataFrame) -> pd.DataFrame:
+    # loop through the df using lambda. Fix the names using .str.capitalize()
+    users  = users.assign(name = lambda x: x['name'].str.capitalize())
+
+    # return sorted df based on user_id values
+    return users.sort_values('user_id')
+
+# Alternative
+def fix_names(users: pd.DataFrame) -> pd.DataFrame:
+    # Apply the str.capitalize() function to fix the names
+    users['name'] = users['name'].str.capitalize()
+    
+    # Sort the result table by user_id in ascending order
+    result_df = users.sort_values(by='user_id', ascending=True)
+    
+    return result_df
+
+
+
 # === test code
 
-# employees = pd.read_csv('./test_data.csv', sep=',')
-# print(calculate_special_bonus(employees))
+# users = pd.read_csv('./test_data.csv', sep=',')
+# print(fix_names(users))
