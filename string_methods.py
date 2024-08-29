@@ -119,7 +119,7 @@ def fix_names(users: pd.DataFrame) -> pd.DataFrame:
     users  = users.assign(name = lambda x: x['name'].str.capitalize())
 
     # return sorted df based on user_id values
-    return users.sort_values('user_id')
+    return users.sort_values(by='user_id', ascending=True)
 
 # Alternative
 def fix_names(users: pd.DataFrame) -> pd.DataFrame:
@@ -133,7 +133,67 @@ def fix_names(users: pd.DataFrame) -> pd.DataFrame:
 
 
 
+# Q 7.
+
+# Find users with valid e-mails
+
+# Write a solution to find the users who have valid emails.
+
+# A valid e-mail has a prefix name and a domain where:
+
+# The prefix name is a string that may 
+# contain letters (upper or lower case), digits, underscore '_', period '.', and/or dash '-'. The prefix name must start with a letter.
+# The domain is '@leetcode.com'.
+# Return the result table in any order.
+
+# The result format is in the following example.
+
+# Example 1:
+
+# Input: 
+# Users table:
+# +---------+-----------+-------------------------+
+# | user_id | name      | mail                    |
+# +---------+-----------+-------------------------+
+# | 1       | Winston   | winston@leetcode.com    |
+# | 2       | Jonathan  | jonathanisgreat         |
+# | 3       | Annabelle | bella-@leetcode.com     |
+# | 4       | Sally     | sally.come@leetcode.com |
+# | 5       | Marwan    | quarz#2020@leetcode.com |
+# | 6       | David     | david69@gmail.com       |
+# | 7       | Shapiro   | .shapo@leetcode.com     |
+# +---------+-----------+-------------------------+
+# Output: 
+# +---------+-----------+-------------------------+
+# | user_id | name      | mail                    |
+# +---------+-----------+-------------------------+
+# | 1       | Winston   | winston@leetcode.com    |
+# | 3       | Annabelle | bella-@leetcode.com     |
+# | 4       | Sally     | sally.come@leetcode.com |
+# +---------+-----------+-------------------------+
+# Explanation: 
+# The mail of user 2 does not have a domain.
+# The mail of user 5 has the # sign which is not allowed.
+# The mail of user 6 does not have the leetcode domain.
+# The mail of user 7 starts with a period.
+
+
+def valid_emails(users: pd.DataFrame) -> pd.DataFrame:
+
+    # Use the str.match() method with a regex pattern to find valid emails
+    valid_emails_df = users[users['mail'].str.match(r'^[A-Za-z][A-Za-z0-9_\.\-]*@leetcode(\?com)?\.com$')]
+    
+    return valid_emails_df
+
+
 # === test code
 
-# users = pd.read_csv('./test_data.csv', sep=',')
-# print(fix_names(users))
+# df = pd.read_csv('./test_data.csv', sep=',')
+# print(valid_emails(df))
+
+
+# =============================================================== #
+
+# N/B
+# ".apply()" iterates through each row and creates new col from old ones 
+
