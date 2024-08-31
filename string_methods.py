@@ -133,7 +133,7 @@ def fix_names(users: pd.DataFrame) -> pd.DataFrame:
 
 
 
-# Q 7.
+# Q 8.
 
 # Find users with valid e-mails
 
@@ -186,10 +186,77 @@ def valid_emails(users: pd.DataFrame) -> pd.DataFrame:
     return valid_emails_df
 
 
+
+
+# Q 9.
+# Patients with a condition
+
+# Write a solution to find the patient_id, patient_name, and conditions of the patients who have Type I Diabetes. Type I Diabetes always starts with DIAB1 prefix.
+
+# Return the result table in any order.
+
+# The result format is in the following example.
+
+ 
+
+# Example 1:
+
+# Input: 
+# Patients table:
+# +------------+--------------+--------------+
+# | patient_id | patient_name | conditions   |
+# +------------+--------------+--------------+
+# | 1          | Daniel       | YFEV COUGH   |
+# | 2          | Alice        |              |
+# | 3          | Bob          | DIAB100 MYOP |
+# | 4          | George       | ACNE DIAB100 |
+# | 5          | Alain        | DIAB201      |
+# +------------+--------------+--------------+
+# Output: 
+# +------------+--------------+--------------+
+# | patient_id | patient_name | conditions   |
+# +------------+--------------+--------------+
+# | 3          | Bob          | DIAB100 MYOP |
+# | 4          | George       | ACNE DIAB100 | 
+# +------------+--------------+--------------+
+# Explanation: Bob and George both have a condition that starts with DIAB1.
+
+
+# patient_id,patient_name,conditions
+# DIAB100
+def find_patients(patients: pd.DataFrame) -> pd.DataFrame:
+    # use .apply() to loop through each cell
+    # using list comprehension, split cell into a list, check if each item in list starts with D. 
+    # if true return the item in a list
+    # convert the returned list to a string
+    # check if 'DIAB1' in the string 
+    # if true return 'DIAB1' else 0. Assign to result column
+     
+    patients['result'] = patients['conditions'].apply(lambda cell: 'DIAB1' if ('DIAB1' in str([i for i in str(cell).split() if i.startswith('D')])) else 0) 
+
+    # Select only required rows marked with 'DIAB1' and delete the result column
+    return patients[(patients['result'] == 'DIAB1')].drop(['result'], axis=1)
+
+# Alternative (using regex)
+def find_patients(patients: pd.DataFrame) -> pd.DataFrame:
+    # Use the str.contains() method to find patients with Type I Diabetes
+    patients_with_diabetes = patients[patients['conditions'].str.contains(r'\bDIAB1')]
+    
+    # Select only the required columns
+    result_df = patients_with_diabetes[['patient_id', 'patient_name', 'conditions']]
+    
+    return result_df
+
+
+
 # === test code
 
 # df = pd.read_csv('./test_data.csv', sep=',')
-# print(valid_emails(df))
+# print(find_patients(df))
+
+
+
+
 
 
 # =============================================================== #
