@@ -131,15 +131,24 @@ def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
     return result_df
 
 
+# Alternative
 
-
-# =============================================================== #
+def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
+    distinct_salary = employee["salary"].drop_duplicates().sort_values(ascending=False)
+    second_highest = distinct_salary.iloc[1] if len(distinct_salary) > 1 else None
+    result = pd.DataFrame({"SecondHighestSalary": [second_highest]})
+    return result
 
 
 # === test code
 
 # df = pd.read_csv('./test_data.csv', sep=',')
 # print(nth_highest_salary(df, 2))
+
+
+# =============================================================== #
+
+
 
 # N/B 
 # . drop_duplicates() will keep the first instance of a duplicate 
